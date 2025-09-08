@@ -1,0 +1,65 @@
+@using System.ComponentModel.DataAnnotations
+
+<div class="d-flex align-items-end flex-wrap gap-2">
+  <div>
+    <label class="form-label">From</label>
+    <InputDate @bind-Value="Model.From" class="form-control" />
+  </div>
+  <div>
+    <label class="form-label">To</label>
+    <InputDate @bind-Value="Model.To" class="form-control" />
+  </div>
+  <div class="ms-2">
+    <button type="button" class="btn btn-outline-secondary" @onclick="SetToday">Today</button>
+    <button type="button" class="btn btn-outline-secondary ms-1" @onclick="Set7Days">7d</button>
+    <button type="button" class="btn btn-outline-secondary ms-1" @onclick="Set30Days">30d</button>
+    <button type="button" class="btn btn-outline-secondary ms-1" @onclick="SetYtd">YTD</button>
+    <button type="button" class="btn btn-primary ms-1" @onclick="Apply">Apply</button>
+  </div>
+</div>
+
+@code {
+  public sealed class DateRange
+  {
+      [Required] public DateTime From { get; set; } = DateTime.Today.AddDays(-7);
+      [Required] public DateTime To { get; set; } = DateTime.Today;
+  }
+
+  [Parameter] public EventCallback<DateRange> OnChange { get; set; }
+  [Parameter] public DateRange Initial { get; set; } = new();
+  private DateRange Model { get; set; } = new();
+
+  protected override void OnInitialized()
+  {
+      Model = new DateRange { From = Initial.From, To = Initial.To };
+  }
+
+  private async Task Apply() => await OnChange.InvokeAsync(new DateRange { From = Model.From, To = Model.To });
+
+  private Task SetToday()
+  {
+      var t = DateTime.Today;
+      Model.From = t;
+      Model.To = t;
+      return Task.CompletedTask;
+  }
+  private Task Set7Days()
+  {
+      Model.From = DateTime.Today.AddDays(-7);
+      Model.To = DateTime.Today;
+      return Task.CompletedTask;
+  }
+  private Task Set30Days()
+  {
+      Model.From = DateTime.Today.AddDays(-30);
+      Model.To = DateTime.Today;
+      return Task.CompletedTask;
+  }
+  private Task SetYtd()
+  {
+      var start = new DateTime(DateTime.Today.Year, 1, 1);
+      Model.From = start;
+      Model.To = DateTime.Today;
+      return Task.CompletedTask;
+  }
+}

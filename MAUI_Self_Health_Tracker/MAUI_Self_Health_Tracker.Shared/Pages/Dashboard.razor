@@ -1,0 +1,57 @@
+@page "/"
+@using MAUI_Self_Health_Tracker.Shared.Data
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<TrackerDbContext> Db
+@using MAUI_Self_Health_Tracker.Shared.Components
+
+<h3>Dashboard</h3>
+
+<TrendChart CanvasId="weightChart" ChartType="line" ChartData="@_weightData" ChartOptions="@_weightOpts" />
+<TrendChart CanvasId="macrosChart" ChartType="bar" ChartData="@_macrosData" ChartOptions="@_macrosOpts" />
+
+@code {
+    private object? _weightData;
+    private object? _weightOpts;
+    private object? _macrosData;
+    private object? _macrosOpts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var db = await Db.CreateDbContextAsync();
+        var from = DateTime.Today.AddDays(-30);
+        var to = DateTime.Today.AddDays(1);
+
+        var weights = await db.BodyWeightEntries
+            .Where(x => x.When >= from && x.When < to)
+            .OrderBy(x => x.When)
+            .Select(x => new { d = x.When.Date, w = x.WeightLb })
+            .ToListAsync();
+
+        var labels = weights.Select(x => x.d.ToString("MM-dd")).ToArray();
+        var series = weights.Select(x => x.w).ToArray();
+
+        _weightData = new { labels, datasets = new[] { new { label = "Weight (lb)", data = series } } };
+        _weightOpts = new { responsive = true };
+
+        var foods = await db.FoodEntries
+            .Where(x => x.When >= from && x.When < to)
+            .GroupBy(x => x.When.Date)
+            .Select(g => new {
+                d = g.Key,
+                protein = g.Sum(x => x.ProteinG ?? 0),
+                carbs = g.Sum(x => x.CarbsG ?? 0),
+                fat = g.Sum(x => x.FatG ?? 0)
+            })
+            .OrderBy(x => x.d).ToListAsync();
+
+        _macrosData = new {
+            labels = foods.Select(x => x.d.ToString("MM-dd")),
+            datasets = new[] {
+                new { label = "Protein g", data = foods.Select(x => x.protein) },
+                new { label = "Carbs g", data = foods.Select(x => x.carbs) },
+                new { label = "Fat g", data = foods.Select(x => x.fat) }
+            }
+        };
+        _macrosOpts = new { responsive = true };
+    }
+}

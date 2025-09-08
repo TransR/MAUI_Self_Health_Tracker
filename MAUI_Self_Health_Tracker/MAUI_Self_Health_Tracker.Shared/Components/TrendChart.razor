@@ -1,0 +1,35 @@
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<div class="card mb-3">
+  <div class="card-body">
+    <canvas id="@CanvasId" style="width:100%; height:@(Height)px"></canvas>
+  </div>
+</div>
+
+@code {
+  [Parameter] public string CanvasId { get; set; } = $"chart_{Guid.NewGuid():N}";
+  [Parameter] public string ChartType { get; set; } = "line";
+  [Parameter] public object? ChartData { get; set; }
+  [Parameter] public object? ChartOptions { get; set; }
+  [Parameter] public int Height { get; set; } = 320;
+
+  private bool _ready;
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+      if (firstRender && ChartData is not null)
+      {
+          await JS.InvokeVoidAsync("chartWrapper.render", CanvasId, ChartType, ChartData, ChartOptions);
+          _ready = true;
+      }
+  }
+
+  protected override async Task OnParametersSetAsync()
+  {
+      if (_ready && ChartData is not null)
+      {
+          await JS.InvokeVoidAsync("chartWrapper.update", CanvasId, ChartData, ChartOptions);
+      }
+  }
+}

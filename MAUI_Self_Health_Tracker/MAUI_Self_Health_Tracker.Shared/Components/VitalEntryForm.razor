@@ -1,0 +1,66 @@
+@using System.ComponentModel.DataAnnotations
+
+<EditForm Model="@Model" OnValidSubmit="@OnSubmit">
+  <DataAnnotationsValidator />
+  <div class="row g-2">
+    <div class="col-md-3">
+      <label class="form-label">When</label>
+      <InputDate @bind-Value="Model.When" class="form-control" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Systolic</label>
+      <InputNumber @bind-Value="Model.Systolic" class="form-control" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Diastolic</label>
+      <InputNumber @bind-Value="Model.Diastolic" class="form-control" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Heart Rate</label>
+      <InputNumber @bind-Value="Model.HeartRate" class="form-control" />
+    </div>
+    <div class="col-md-1">
+      <label class="form-label">SpO2</label>
+      <InputNumber @bind-Value="Model.SpO2" class="form-control" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Temp (°F)</label>
+      <InputNumber @bind-Value="Model.TemperatureF" class="form-control" />
+    </div>
+  </div>
+  <div class="row g-2 mt-1">
+    <div class="col-md-12">
+      <label class="form-label">Note</label>
+      <InputText @bind-Value="Model.Note" class="form-control" />
+    </div>
+  </div>
+  <div class="mt-3">
+    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="button" class="btn btn-secondary ms-2" @onclick="Reset">Reset</button>
+  </div>
+</EditForm>
+
+@code {
+  public sealed class VitalFormModel
+  {
+      [Required]
+      public DateTime When { get; set; } = DateTime.Now;
+      [Range(70, 240)]
+      public int? Systolic { get; set; }
+      [Range(40, 140)]
+      public int? Diastolic { get; set; }
+      [Range(30, 220)]
+      public int? HeartRate { get; set; }
+      [Range(50, 100)]
+      public int? SpO2 { get; set; }
+      [Range(85, 110)]
+      public decimal? TemperatureF { get; set; }
+      public string? Note { get; set; }
+  }
+
+  [Parameter] public EventCallback<VitalFormModel> Submit { get; set; }
+  private VitalFormModel Model { get; set; } = new();
+
+  private async Task OnSubmit() => await Submit.InvokeAsync(Model);
+  private void Reset() => Model = new();
+}

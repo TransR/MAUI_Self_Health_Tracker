@@ -1,0 +1,49 @@
+@using System.ComponentModel.DataAnnotations
+
+<EditForm Model="@Model" OnValidSubmit="@OnSubmit">
+  <DataAnnotationsValidator />
+  <div class="row g-2">
+    <div class="col-md-4">
+      <label class="form-label">When</label>
+      <InputDate @bind-Value="Model.When" class="form-control" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Weight (lb)</label>
+      <InputNumber @bind-Value="Model.WeightLb" class="form-control" />
+      <ValidationMessage For="() => Model.WeightLb" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Body Fat (%)</label>
+      <InputNumber @bind-Value="Model.BodyFatPct" class="form-control" />
+    </div>
+  </div>
+  <div class="row g-2 mt-1">
+    <div class="col-md-12">
+      <label class="form-label">Note</label>
+      <InputText @bind-Value="Model.Note" class="form-control" />
+    </div>
+  </div>
+  <div class="mt-3">
+    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="button" class="btn btn-secondary ms-2" @onclick="Reset">Reset</button>
+  </div>
+</EditForm>
+
+@code {
+  public sealed class WeightFormModel
+  {
+      [Required]
+      public DateTime When { get; set; } = DateTime.Now;
+      [Range(50, 600)]
+      public decimal WeightLb { get; set; }
+      [Range(1, 80)]
+      public decimal? BodyFatPct { get; set; }
+      public string? Note { get; set; }
+  }
+
+  [Parameter] public EventCallback<WeightFormModel> Submit { get; set; }
+  private WeightFormModel Model { get; set; } = new();
+
+  private async Task OnSubmit() => await Submit.InvokeAsync(Model);
+  private void Reset() => Model = new();
+}

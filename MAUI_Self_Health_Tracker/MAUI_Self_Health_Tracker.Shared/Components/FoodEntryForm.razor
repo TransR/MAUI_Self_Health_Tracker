@@ -1,0 +1,88 @@
+@using System.ComponentModel.DataAnnotations
+
+<EditForm Model="@Model" OnValidSubmit="@OnSubmit">
+  <DataAnnotationsValidator />
+  <div class="row g-2">
+    <div class="col-md-3">
+      <label class="form-label">When</label>
+      <InputDate @bind-Value="Model.When" class="form-control" />
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Item</label>
+      <InputText @bind-Value="Model.Item" class="form-control" />
+      <ValidationMessage For="() => Model.Item" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Quantity</label>
+      <InputNumber @bind-Value="Model.Quantity" class="form-control" />
+      <ValidationMessage For="() => Model.Quantity" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Unit</label>
+      <InputText @bind-Value="Model.Unit" class="form-control" />
+      <ValidationMessage For="() => Model.Unit" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Meal</label>
+      <InputText @bind-Value="Model.Meal" class="form-control" />
+    </div>
+  </div>
+  <div class="row g-2 mt-1">
+    <div class="col-md-2">
+      <label class="form-label">Calories</label>
+      <InputNumber @bind-Value="Model.Calories" class="form-control" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Protein (g)</label>
+      <InputNumber @bind-Value="Model.ProteinG" class="form-control" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Carbs (g)</label>
+      <InputNumber @bind-Value="Model.CarbsG" class="form-control" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Fat (g)</label>
+      <InputNumber @bind-Value="Model.FatG" class="form-control" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Note</label>
+      <InputText @bind-Value="Model.Note" class="form-control" />
+    </div>
+  </div>
+  <div class="mt-3">
+    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="button" class="btn btn-secondary ms-2" @onclick="Reset">Reset</button>
+  </div>
+</EditForm>
+
+@code {
+  public sealed class FoodFormModel
+  {
+      [Required]
+      public DateTime When { get; set; } = DateTime.Now;
+      [Required, StringLength(200)]
+      public string Item { get; set; } = string.Empty;
+      [Range(0.01, 100000)]
+      public decimal Quantity { get; set; } = 1;
+      [Required, StringLength(40)]
+      public string Unit { get; set; } = "serving";
+      [Range(0, 10000)]
+      public decimal? Calories { get; set; }
+      [Range(0, 1000)]
+      public decimal? ProteinG { get; set; }
+      [Range(0, 1000)]
+      public decimal? CarbsG { get; set; }
+      [Range(0, 1000)]
+      public decimal? FatG { get; set; }
+      public string? Meal { get; set; }
+      public string? Note { get; set; }
+  }
+
+  [Parameter] public EventCallback<FoodFormModel> Submit { get; set; }
+
+  private FoodFormModel Model { get; set; } = new();
+
+  private async Task OnSubmit() => await Submit.InvokeAsync(Model);
+
+  private void Reset() => Model = new();
+}

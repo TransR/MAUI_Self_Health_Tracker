@@ -1,0 +1,62 @@
+@using System.ComponentModel.DataAnnotations
+
+<EditForm Model="@Model" OnValidSubmit="@OnSubmit">
+  <DataAnnotationsValidator />
+  <div class="row g-2">
+    <div class="col-md-3">
+      <label class="form-label">When</label>
+      <InputDate @bind-Value="Model.When" class="form-control" />
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Activity</label>
+      <InputText @bind-Value="Model.ActivityType" class="form-control" />
+      <ValidationMessage For="() => Model.ActivityType" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Minutes</label>
+      <InputNumber @bind-Value="Model.Minutes" class="form-control" />
+      <ValidationMessage For="() => Model.Minutes" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Calories Burned</label>
+      <InputNumber @bind-Value="Model.CaloriesBurned" class="form-control" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">RPE</label>
+      <InputNumber @bind-Value="Model.Rpe" class="form-control" />
+    </div>
+  </div>
+  <div class="row g-2 mt-1">
+    <div class="col-md-12">
+      <label class="form-label">Note</label>
+      <InputText @bind-Value="Model.Note" class="form-control" />
+    </div>
+  </div>
+  <div class="mt-3">
+    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="button" class="btn btn-secondary ms-2" @onclick="Reset">Reset</button>
+  </div>
+</EditForm>
+
+@code {
+  public sealed class ExerciseFormModel
+  {
+      [Required]
+      public DateTime When { get; set; } = DateTime.Now;
+      [Required, StringLength(60)]
+      public string ActivityType { get; set; } = string.Empty;
+      [Range(1, 1440)]
+      public int Minutes { get; set; }
+      [Range(0, 10000)]
+      public decimal? CaloriesBurned { get; set; }
+      [Range(1, 10)]
+      public int? Rpe { get; set; }
+      public string? Note { get; set; }
+  }
+
+  [Parameter] public EventCallback<ExerciseFormModel> Submit { get; set; }
+  private ExerciseFormModel Model { get; set; } = new();
+
+  private async Task OnSubmit() => await Submit.InvokeAsync(Model);
+  private void Reset() => Model = new();
+}

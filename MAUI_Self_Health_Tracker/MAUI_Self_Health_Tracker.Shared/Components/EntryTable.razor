@@ -1,0 +1,31 @@
+@typeparam TItem
+
+@if (Items is null || !Items.Any())
+{
+  <div class="text-muted">@EmptyText</div>
+}
+else
+{
+  <div class="table-responsive">
+    <table class="table table-sm table-hover align-middle">
+      <thead class="table-light">
+        @HeaderTemplate
+      </thead>
+      <tbody>
+        @foreach (var item in Items)
+        {
+            <tr>
+              @RowTemplate(item)
+            </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+@code {
+  [Parameter] public IEnumerable<TItem>? Items { get; set; }
+  [Parameter] public RenderFragment? HeaderTemplate { get; set; }
+  [Parameter] public RenderFragment<TItem> RowTemplate { get; set; } = default!;
+  [Parameter] public string EmptyText { get; set; } = "No data available";
+}
