@@ -1,0 +1,33 @@
+{
+  "name": "lumina-gate",
+  "version": "1.0.0",
+  "timestamp": "2025-09-10T00:00:00Z",
+  "environment": "SAMPLE",
+  "pass": true,
+  "checks": {
+    "restore": {
+      "pass": true,
+      "details": "dotnet restore succeeded"
+    },
+    "build": {
+      "pass": true,
+      "details": "solution built successfully"
+    },
+    "ef": {
+      "pass": true,
+      "contextFactory": "TrackerDbContextFactory",
+      "migrationsFound": 0,
+      "details": "EF tools available, context constructed (no migrations yet)"
+    },
+    "config": {
+      "pass": true,
+      "appsettings": "appsettings.Development.json",
+      "connectionString": "DefaultConnection",
+      "details": "Connection string present (untested in SAMPLE)"
+    }
+  },
+  "notes": [
+    "This is a sample placeholder file.",
+    "Real gate runs will create timestamped JSON reports here."
+  ]
+}

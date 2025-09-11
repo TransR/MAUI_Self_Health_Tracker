@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lumina Gate Result",
+  "type": "object",
+  "required": [ "version", "timestampUtc", "gate", "restore", "build", "ef", "database", "pass" ],
+  "properties": {
+    "version": { "type": "string" },
+    "timestampUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "gate": {
+      "type": "object",
+      "required": [ "solutionPath", "sharedProject", "startupProject", "appSettingsPath" ],
+      "properties": {
+        "solutionPath": { "type": "string" },
+        "sharedProject": { "type": "string" },
+        "startupProject": { "type": "string" },
+        "appSettingsPath": { "type": "string" },
+        "connectionStringName": {
+          "type": "string",
+          "default": "DefaultConnection"
+        },
+        "environment": {
+          "type": "string",
+          "enum": [ "Development", "Production", "Staging", "Local" ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "restore": {
+      "type": "object",
+      "required": [ "status", "exitCode", "durationMs" ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [ "Success", "Failed" ]
+        },
+        "exitCode": { "type": "integer" },
+        "durationMs": { "type": "integer" },
+        "log": { "type": "string" }
+      }
+    },
+    "build": {
+      "type": "object",
+      "required": [ "status", "exitCode", "durationMs" ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [ "Success", "Failed" ]
+        },
+        "exitCode": { "type": "integer" },
+        "durationMs": { "type": "integer" },
+        "log": { "type": "string" }
+      }
+    },
+    "ef": {
+      "type": "object",
+      "required": [ "status", "exitCode", "migrations" ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [ "Success", "Failed" ]
+        },
+        "exitCode": { "type": "integer" },
+        "migrations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "log": { "type": "string" }
+      }
+    },
+    "database": {
+      "type": "object",
+      "required": [ "status", "provider", "connectionStringSource" ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [ "Connected", "Failed", "Skipped" ]
+        },
+        "provider": { "type": "string" },
+        "connectionStringSource": {
+          "type": "string",
+          "enum": [ "appsettings.Development.json", "appsettings.json", "EnvVar", "NotFound" ]
+        },
+        "exception": { "type": "string" }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "pass": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}

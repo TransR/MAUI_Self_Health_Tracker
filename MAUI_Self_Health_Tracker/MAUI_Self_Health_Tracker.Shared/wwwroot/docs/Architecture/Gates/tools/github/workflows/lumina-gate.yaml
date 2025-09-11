@@ -1,0 +1,78 @@
+name: Lumina Gate
+
+on:
+  workflow_dispatch: {}
+  pull_request:
+    paths:
+      - 'MAUI_Self_Health_Tracker/**'
+      - 'tools/gates/**'
+      - '.github/workflows/lumina-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: Gate (Restore/Build/EF/DB -> JSON)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK 9.x
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Display dotnet info
+        run: dotnet --info
+
+      - name: Ensure EF Tools available
+        run: dotnet tool install --global dotnet-ef || dotnet tool update --global dotnet-ef
+      - name: Add tools to PATH
+        shell: pwsh
+        run: |
+          $toolPath = "$env:USERPROFILE\.dotnet\tools"
+          echo "$toolPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      # Optional: avoid DB hard-fail on hosted runners (no LocalDB/SQL installed).
+      # The Lumina script will still try to connect and report JSON; this step won’t fail the job.
+      - name: Run Lumina Gate
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          .\tools\gates\lumina-gate.ps1 `
+            -SolutionPath ".\MAUI_Self_Health_Tracker\MAUI_Self_Health_Tracker.sln" `
+            -SharedProject ".\MAUI_Self_Health_Tracker\MAUI_Self_Health_Tracker.Shared\MAUI_Self_Health_Tracker.Shared.csproj" `
+            -StartupProject ".\MAUI_Self_Health_Tracker\MAUI_Self_Health_Tracker.Web\MAUI_Self_Health_Tracker.Web.csproj" `
+            -AppSettingsPath ".\MAUI_Self_Health_Tracker\MAUI_Self_Health_Tracker.Web\appsettings.Development.json" `
+            -Environment "CI"
+
+      - name: Upload Lumina results
+        uses: actions/upload-artifact@v4
+        with:
+          name: lumina-gate-results
+          path: |
+            MAUI_Self_Health_Tracker/MAUI_Self_Health_Tracker.Shared/wwwroot/docs/Architecture/Gates/results/*.json
+          if-no-files-found: warn
+
+      # Later, when you want strict enforcement, you can parse the JSON and fail on pass=false.
+      # Keeping this commented for now to avoid blocking:
+      #
+      # - name: Enforce gate pass
+      #   if: success() # job-level success
+      #   shell: pwsh
+      #   run: |
+      #     $dir = "MAUI_Self_Health_Tracker/MAUI_Self_Health_Tracker.Shared/wwwroot/docs/Architecture/Gates/results"
+      #     $latest = Get-ChildItem $dir -Filter "lumina-result.*.json" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+      #     if (-not $latest) {
+      #       Write-Error "No lumina-result JSON found."
+      #       exit 1
+      #     }
+      #     $data = Get-Content -Raw $latest.FullName | ConvertFrom-Json
+      #     if (-not $data.pass) {
+      #       Write-Host "Gate reported pass=false. Details:"
+      #       $data | ConvertTo-Json -Depth 8
+      #       exit 2
+      #     }

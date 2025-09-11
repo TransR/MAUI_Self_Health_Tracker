@@ -1,0 +1,37 @@
+{
+  "version": "0.1.0",
+  "timestampUtc": "2025-09-10T23:59:59Z",
+  "gate": {
+    "solutionPath": ".\\MAUI_Self_Health_Tracker\\MAUI_Self_Health_Tracker.sln",
+    "sharedProject": ".\\MAUI_Self_Health_Tracker\\MAUI_Self_Health_Tracker.Shared\\MAUI_Self_Health_Tracker.Shared.csproj",
+    "startupProject": ".\\MAUI_Self_Health_Tracker\\MAUI_Self_Health_Tracker.Web\\MAUI_Self_Health_Tracker.Web.csproj",
+    "appSettingsPath": ".\\MAUI_Self_Health_Tracker\\MAUI_Self_Health_Tracker.Web\\appsettings.Development.json",
+    "connectionStringName": "DefaultConnection",
+    "environment": "Development"
+  },
+  "restore": {
+    "status": "Success",
+    "exitCode": 0,
+    "durationMs": 3120,
+    "log": "OK"
+  },
+  "build": {
+    "status": "Success",
+    "exitCode": 0,
+    "durationMs": 14850,
+    "log": "OK"
+  },
+  "ef": {
+    "status": "Success",
+    "exitCode": 0,
+    "migrations": [ "20240909120000_InitialCreate" ],
+    "log": "1 migration found."
+  },
+  "database": {
+    "status": "Connected",
+    "provider": "SqlServer",
+    "connectionStringSource": "appsettings.Development.json"
+  },
+  "warnings": [],
+  "pass": true
+}

@@ -361,3 +361,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# === Lumina Gate Artifacts ===
+
+# Ignore all generated result JSON files under any Gates/results folder
+**/Gates/results/lumina-result.*.json
+
+# Keep the sample + schema + .gitkeep files
+!**/Gates/results/lumina-result.sample.json
+!**/Gates/results/.gitkeep

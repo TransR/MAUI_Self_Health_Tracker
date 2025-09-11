@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MAUI_Self_Health_Tracker.Shared.Data;
 
-public static class SeedData
+public static class ServiceRegistration
 {
     public sealed class SeedOptions
     {
