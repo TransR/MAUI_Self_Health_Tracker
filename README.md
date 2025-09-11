@@ -1,7 +1,21 @@
 # MAUI Self Health Tracker – Cross-Platform Prototype for Self Health® (v1)
 
-**Proprietary Software by Mark J. Silvestri & Independent Care Systems Inc (ICSI)**  
-**Self Health® is a registered trademark of Independent Care Systems Inc (ICSI)**
+The **MAUI Self Health Tracker** is a private, cross-platform application prototype designed to deliver the foundation of the **Self Health®** system. It leverages **.NET 9, ASP.NET Core 9, and MAUI Hybrid/Web** technologies to support mobile, desktop, and web targets.  
+ 
+---
+
+[`Home`](./README.md)
+
+---
+
+This repository is **strictly proprietary** and **not open for contributions**. Its purpose is internal development and controlled distribution only.
+
+---
+
+```bash
+# Clone the Self Health Tracker Git Repository
+$ git clone https://github.com/TransR/MAUI_Self_Health_Tracker.git
+```
 
 ---
 
@@ -20,25 +34,7 @@
 > **Status:** This doc tracks **active issues, warnings, and assumption alerts**.  
 > **Owner:** Jason Silvestri (with Lumina AI assist).  
 >
-> See your active alerts here: [`See ALERTS!`](../../../../README.md)
-
----
-
-
-> The **MAUI Self Health Tracker** is a private, cross-platform application prototype designed to deliver the foundation of the **Self Health®** system. It leverages **.NET 9, ASP.NET Core 9, and MAUI Hybrid/Web** technologies to support mobile, desktop, and web targets.  
-> 
-> This repository is **strictly proprietary** and **not open for contributions**. Its purpose is internal development and controlled distribution only.
-
----
-
-```bash
-# Clone the Self Health Tracker Git Repository
-$ git clone https://github.com/TransR/MAUI_Self_Health_Tracker.git
-```
-
----
-
-[`Home`](./README.md)
+> See your active alerts here: [`See ALERTS!`](./MAUI_Self_Health_Tracker.Shared/wwwroot/docs/Alerts/README.md)
 
 ---
 
@@ -53,13 +49,6 @@ $ git clone https://github.com/TransR/MAUI_Self_Health_Tracker.git
    - [Option 3: Node.js / degit](#option-3-using-node-or-npm-degit)  
 6. [Build & Run](#build--run)  
 7. [License / Ownership](#license--ownership)
-
----
-
-# MAUI Self Health Tracker – Alerts (v1)
-
-> **Status:** Active alert log for known issues, risks, and migration blockers.  
-> Location: `MAUI_Self_Health_Tracker.Shared/wwwroot/docs/Alerts/README.md`
 
 ---
 
