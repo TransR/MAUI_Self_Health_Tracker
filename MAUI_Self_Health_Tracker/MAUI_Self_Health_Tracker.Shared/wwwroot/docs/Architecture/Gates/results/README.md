@@ -20,7 +20,7 @@ This folder contains **scripts and helper utilities** used to run Lumina Gate ch
 ## Navigation
 - Back to **Gates Overview**: [`../README.md`](../README.md)  
 - Back to **Architecture Docs**: [`../../README.md`](../../README.md)  
-- Back to **Repo Home**: [`../../../../../../../README.md`](../../../../../../../README.md)
+- Back to **Repo Home**: [`../../../../../../../../README.md`](../../../../../../../../README.md)
 
 ---
 
