@@ -370,3 +370,9 @@ FodyWeavers.xsd
 # Keep the sample + schema + .gitkeep files
 !**/Gates/results/lumina-result.sample.json
 !**/Gates/results/.gitkeep
+/MAUI_Self_Health_Tracker/MAUI_Self_Health_Tracker.Shared/wwwroot/docs/Gem-Thinking-Possible-Dup.docx
+/MAUI_Self_Health_Tracker/MAUI_Self_Health_Tracker.Shared/wwwroot/docs/Gem-Thinking.docx
+/MAUI_Self_Health_Tracker/MAUI_Self_Health_Tracker.Shared/wwwroot/docs/MAUI-Proj-Bug.docx
+/MAUI_Self_Health_Tracker/MAUI_Self_Health_Tracker.Shared/wwwroot/docs/Self Health Multi-Platform Applications.docx
+/MAUI_Self_Health_Tracker/MAUI_Self_Health_Tracker.Shared/wwwroot/docs/~$UI-Proj-Bug.docx
+/MAUI_Self_Health_Tracker/MAUI_Self_Health_Tracker.Shared/wwwroot/docs/~WRL0005.tmp
